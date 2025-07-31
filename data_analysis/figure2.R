@@ -80,7 +80,7 @@ dev.off()
 library(org.Hs.eg.db)
 library(clusterProfiler)
 
-# total OG protein
+# total OG glycoprotein
 OG_glycoprotein_total <- bind_rows(
   OG_glycoprotein_Top_tb_HepG2 |> select(UniprotID),
   OG_glycoprotein_Top_tb_HEK293T |> select(UniprotID),
