@@ -58,7 +58,7 @@ write_csv(
 
 ## glycoprotein level quantification
 # OG HepG2
-OG_glycoprotein_HepG2_noTn <- OG_psm_HepG2_noTn |> 
+OG_glycoprotein_HepG2_noTn <- OG_glycopeptide_HepG2_noTn |> 
   group_by(UniprotID) |> 
   summarize(
     Tuni_1 = sum(Tuni_1),
@@ -75,7 +75,7 @@ write_csv(
 )
 
 # OG HEK293T
-OG_glycoprotein_HEK293T_noTn <- OG_psm_HEK293T_noTn |> 
+OG_glycoprotein_HEK293T_noTn <- OG_glycopeptide_HEK293T_noTn |> 
   group_by(UniprotID) |> 
   summarize(
     Tuni_1 = sum(Tuni_1),
@@ -92,7 +92,7 @@ write_csv(
 )
 
 # OG Jurkat
-OG_glycoprotein_Jurkat_noTn <- OG_psm_Jurkat_noTn |> 
+OG_glycoprotein_Jurkat_noTn <- OG_glycopeptide_Jurkat_noTn |> 
   group_by(UniprotID) |> 
   summarize(
     Tuni_1 = sum(Tuni_1),

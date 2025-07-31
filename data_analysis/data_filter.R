@@ -208,22 +208,22 @@ OG_psm_raw_Jurkat <- bind_rows(OG_psm_raw_Jurkat_localized, OG_psm_raw_Jurkat_no
 
 write_csv(
   OG_psm_raw_Jurkat,
-  file = 'data_source/raw_data/OG_psm_raw_Jurkat.csv'
+  file = 'data_source/raw_file/OG_psm_raw_Jurkat.csv'
 )
 
 # WP HepG2
 WP_psm_raw_HepG2 <- WP_psm_raw_HepG2 |> 
-  select(ScanF, SrchID, SrchName, psm, Trimmed.psm, PPM, XCorr, Start.Position, End.Position, Gene.Symbol, Reference, 
+  select(ScanF, SrchID, Peptide, Trimmed.Peptide, PPM, XCorr, Start.Position, End.Position, Gene.Symbol, Reference, 
          Sn.126 = ..126.Sn,
-         Sn.127n = ..127n.Sn,
-         Sn.128c = ..128c.Sn,
-         Sn.129n = ..129n.Sn,
-         Sn.130c = ..130c.Sn,
+         Sn.127n = ..127.Sn,
+         Sn.128c = ..128.Sn,
+         Sn.129n = ..129.Sn,
+         Sn.130c = ..130.Sn,
          Sn.131 = ..131.Sn,
          Sum.Sn) |> 
   filter(XCorr > 1.2, PPM > -10, PPM < 10, Sn.126 > 5, Sn.127n > 5, Sn.128c > 5, Sn.129n > 5, Sn.130c > 5, Sn.131 > 5) |> 
   separate(Reference, into = c("sp", "UniprotID", "Gene.Symbol"), sep = "\\|") |> 
-  select(psm, Trimmed.psm, XCorr, PPM, UniprotID, Sn.126:Sn.131, Sum.Sn, Start.Position, End.Position, ScanF:SrchName)
+  select(Peptide, Trimmed.Peptide, XCorr, PPM, UniprotID, Sn.126:Sn.131, Sum.Sn, Start.Position, End.Position, ScanF, SrchID)
 
 write_csv(
   WP_psm_raw_HepG2,
@@ -232,7 +232,7 @@ write_csv(
 
 # WP HEK293T
 WP_psm_raw_HEK293T <- WP_psm_raw_HEK293T |> 
-  select(ScanF, SrchID, SrchName, psm, Trimmed.psm, PPM, XCorr, Start.Position, End.Position, Gene.Symbol, Reference, 
+  select(ScanF, SrchID, Peptide, Trimmed.Peptide, PPM, XCorr, Start.Position, End.Position, Gene.Symbol, Reference, 
          Sn.126 = ..126.Sn,
          Sn.127n = ..127n.Sn,
          Sn.128c = ..128c.Sn,
@@ -242,7 +242,7 @@ WP_psm_raw_HEK293T <- WP_psm_raw_HEK293T |>
          Sum.Sn) |> 
   filter(XCorr > 1.2, PPM > -10, PPM < 10, Sn.126 > 5, Sn.127n > 5, Sn.128c > 5, Sn.129n > 5, Sn.130c > 5, Sn.131 > 5) |> 
   separate(Reference, into = c("sp", "UniprotID", "Gene.Symbol"), sep = "\\|") |> 
-  select(psm, Trimmed.psm, XCorr, PPM, UniprotID, Sn.126:Sn.131, Sum.Sn, Start.Position, End.Position, ScanF:SrchName)
+  select(Peptide, Trimmed.Peptide, XCorr, PPM, UniprotID, Sn.126:Sn.131, Sum.Sn, Start.Position, End.Position, ScanF, SrchID)
 
 write_csv(
   WP_psm_raw_HEK293T,
@@ -251,7 +251,7 @@ write_csv(
 
 # WP Jurkat
 WP_psm_raw_Jurkat <- WP_psm_raw_Jurkat |> 
-  select(ScanF, SrchID, SrchName, psm, Trimmed.psm, PPM, XCorr, Start.Position, End.Position, Gene.Symbol, Reference, 
+  select(ScanF, SrchID, Peptide, Trimmed.Peptide, PPM, XCorr, Start.Position, End.Position, Gene.Symbol, Reference, 
          Sn.126 = ..126.Sn,
          Sn.127n = ..127n.Sn,
          Sn.128c = ..128c.Sn,
@@ -261,7 +261,7 @@ WP_psm_raw_Jurkat <- WP_psm_raw_Jurkat |>
          Sum.Sn) |> 
   filter(XCorr > 1.2, PPM > -10, PPM < 10, Sn.126 > 5, Sn.127n > 5, Sn.128c > 5, Sn.129n > 5, Sn.130c > 5, Sn.131 > 5) |> 
   separate(Reference, into = c("sp", "UniprotID", "Gene.Symbol"), sep = "\\|") |> 
-  select(psm, Trimmed.psm, XCorr, PPM, UniprotID, Sn.126:Sn.131, Sum.Sn, Start.Position, End.Position, ScanF:SrchName)
+  select(Peptide, Trimmed.Peptide, XCorr, PPM, UniprotID, Sn.126:Sn.131, Sum.Sn, Start.Position, End.Position, ScanF, SrchID)
 
 write_csv(
   WP_psm_raw_Jurkat,

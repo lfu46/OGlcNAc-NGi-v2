@@ -22,7 +22,7 @@ OG_psm_raw_Jurkat <- read_csv(
 
 # import whole proteome result
 WP_psm_raw_HepG2 <- read_csv(
-  '',
+  '/Volumes/Expansion/LocalDisk_E/LocalDisk_1/Glycosylation_Crosstalk/Data/NOCT_HepG2_07042024/WP_sequest/ronghuwulab_1753914163.csv',
   col_names = TRUE,
   name_repair = "universal"
 )

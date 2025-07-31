@@ -10,7 +10,7 @@ OG_psm_raw_HEK293T <- read_csv(
   'data_source/raw_file/OG_psm_raw_HEK293T.csv'
 )
 OG_psm_raw_Jurkat <- read_csv(
-  'data_source/raw_data/OG_psm_raw_Jurkat.csv'
+  'data_source/raw_file/OG_psm_raw_Jurkat.csv'
 )
 
 # WP
@@ -87,4 +87,53 @@ WP_protein_HEK293T <- read_csv(
 # Jurkat
 WP_protein_Jurkat <- read_csv(
   'data_source/WP_quantification/WP_protein_HEK293T.csv'
+)
+
+### OG normalization
+## glycopeptide level
+# HepG2
+OG_glycopeptide_noTn_sl_tmm_HepG2 <- read_csv(
+  'data_source/OG_normalization/OG_glycopeptide_noTn_sl_tmm_HepG2.csv'
+)
+
+# HEK293T
+OG_glycopeptide_noTn_sl_tmm_HEK293T <- read_csv(
+  'data_source/OG_normalization/OG_glycopeptide_noTn_sl_tmm_HEK293T.csv'
+)
+
+# Jurkat
+OG_glycopeptide_noTn_sl_tmm_Jurkat <- read_csv(
+  'data_source/OG_normalization/OG_glycopeptide_noTn_sl_tmm_Jurkat.csv'
+)
+
+## glycoprotein level
+# HepG2
+OG_glycoprotein_noTn_sl_tmm_HepG2 <- read_csv(
+  'data_source/OG_normalization/OG_glycoprotein_noTn_sl_tmm_HepG2.csv'
+)
+
+# HEK293T
+OG_glycoprotein_noTn_sl_tmm_HEK293T <- read_csv(
+  'data_source/OG_normalization/OG_glycoprotein_noTn_sl_tmm_HEK293T.csv'
+)
+
+# Jurkat
+OG_glycoprotein_noTn_sl_tmm_Jurkat <- read_csv(
+  'data_source/OG_normalization/OG_glycoprotein_noTn_sl_tmm_Jurkat.csv'
+)
+
+## WP normalization
+# HepG2
+WP_protein_sl_tmm_HepG2 <- read_csv(
+  'data_source/WP_normalization/WP_protein_sl_tmm_HepG2.csv'
+)
+
+# HEK293T 
+WP_protein_sl_tmm_HEK293T <- read_csv(
+  'data_source/WP_normalization/WP_protein_sl_tmm_HEK293T.csv'
+)
+
+# Jurkat
+WP_protein_sl_tmm_Jurkat <- read_csv(
+  'data_source/WP_normalization/WP_protein_sl_tmm_Jurkat.csv'
 )
