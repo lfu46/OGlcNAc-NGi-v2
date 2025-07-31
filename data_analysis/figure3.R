@@ -229,9 +229,144 @@ write_csv(
   file = 'data_source/gene_ontology/OG_glycoprotein_Jurkat_GO.csv'
 )
 
-## common terms
+### common terms
+# import gene ontology result for OG glycoprotein
+OG_glycoprotein_HepG2_GO <- read_csv(
+  'data_source/gene_ontology/OG_glycoprotein_HepG2_GO.csv'
+)
+
+OG_glycoprotein_HEK293T_GO <- read_csv(
+  'data_source/gene_ontology/OG_glycoprotein_HEK293T_GO.csv'
+)
+
+OG_glycoprotein_Jurkat_GO <- read_csv(
+  'data_source/gene_ontology/OG_glycoprotein_Jurkat_GO.csv'
+)
+
+## RNA binding
+# HepG2
+RNA_binding_OG_glycoprotein_HepG2 <- OG_glycoprotein_HepG2_GO |> 
+  filter(Description == 'RNA binding') |> 
+  select(geneID) |> 
+  separate_rows(geneID, sep = '/') |> 
+  pull()
+
+OG_glycoprotein_HepG2_RNA_binding <- OG_glycoprotein_Top_tb_HepG2 |> 
+  filter(UniprotID %in% RNA_binding_OG_glycoprotein_HepG2) |> 
+  select(UniprotID, logFC) |> 
+  mutate(cell = 'HepG2')
+
+# HEK293T
+RNA_binding_OG_glycoprotein_HEK293T <- OG_glycoprotein_HEK293T_GO |> 
+  filter(Description == 'RNA binding') |> 
+  select(geneID) |> 
+  separate_rows(geneID, sep = '/') |> 
+  pull()
+
+OG_glycoprotein_HEK293T_RNA_binding <- OG_glycoprotein_Top_tb_HEK293T |> 
+  filter(UniprotID %in% RNA_binding_OG_glycoprotein_HEK293T) |> 
+  select(UniprotID, logFC) |> 
+  mutate(cell = 'HEK293T')
+
+# Jurkat
+RNA_binding_OG_glycoprotein_Jurkat <- OG_glycoprotein_Jurkat_GO |> 
+  filter(Description == 'RNA binding') |> 
+  select(geneID) |> 
+  separate_rows(geneID, sep = '/') |> 
+  pull()
+
+OG_glycoprotein_Jurkat_RNA_binding <- OG_glycoprotein_Top_tb_Jurkat |> 
+  filter(UniprotID %in% RNA_binding_OG_glycoprotein_Jurkat) |> 
+  select(UniprotID, logFC) |> 
+  mutate(cell = 'Jurkat')
+
+## DNA binding
+# HepG2
+DNA_binding_OG_glycoprotein_HepG2 <- OG_glycoprotein_HepG2_GO |> 
+  filter(Description == 'DNA binding') |> 
+  select(geneID) |> 
+  separate_rows(geneID, sep = '/') |> 
+  pull()
+
+OG_glycoprotein_HepG2_DNA_binding <- OG_glycoprotein_Top_tb_HepG2 |> 
+  filter(UniprotID %in% DNA_binding_OG_glycoprotein_HepG2) |> 
+  select(UniprotID, logFC) |> 
+  mutate(cell = 'HepG2')
+
+# HEK293T
+DNA_binding_OG_glycoprotein_HEK293T <- OG_glycoprotein_HEK293T_GO |> 
+  filter(Description == 'DNA binding') |> 
+  select(geneID) |> 
+  separate_rows(geneID, sep = '/') |> 
+  pull()
+
+OG_glycoprotein_HEK293T_DNA_binding <- OG_glycoprotein_Top_tb_HEK293T |> 
+  filter(UniprotID %in% DNA_binding_OG_glycoprotein_HEK293T) |> 
+  select(UniprotID, logFC) |> 
+  mutate(cell = 'HEK293T')
+
+# Jurkat
+DNA_binding_OG_glycoprotein_Jurkat <- OG_glycoprotein_Jurkat_GO |> 
+  filter(Description == 'DNA binding') |> 
+  select(geneID) |> 
+  separate_rows(geneID, sep = '/') |> 
+  pull()
+
+OG_glycoprotein_Jurkat_DNA_binding <- OG_glycoprotein_Top_tb_Jurkat |> 
+  filter(UniprotID %in% DNA_binding_OG_glycoprotein_Jurkat) |> 
+  select(UniprotID, logFC) |> 
+  mutate(cell = 'Jurkat')
+
+## nucleocytoplasmic transport
+# HepG2
+Nuc_Cyto_Transport_OG_glycoprotein_HepG2 <- OG_glycoprotein_HepG2_GO |> 
+  filter(Description == 'nucleocytoplasmic transport') |> 
+  select(geneID) |> 
+  separate_rows(geneID, sep = '/') |> 
+  pull()
+
+OG_glycoprotein_HepG2_Nuc_Cyto_Transport <- OG_glycoprotein_Top_tb_HepG2 |> 
+  filter(UniprotID %in% Nuc_Cyto_Transport_OG_glycoprotein_HepG2) |> 
+  select(UniprotID, logFC) |> 
+  mutate(cell = 'HepG2')
+
+# HEK293T
+Nuc_Cyto_Transport_OG_glycoprotein_HEK293T <- OG_glycoprotein_HEK293T_GO |> 
+  filter(Description == 'nucleocytoplasmic transport') |> 
+  select(geneID) |> 
+  separate_rows(geneID, sep = '/') |> 
+  pull()
+
+OG_glycoprotein_HEK293T_Nuc_Cyto_Transport <- OG_glycoprotein_Top_tb_HEK293T |> 
+  filter(UniprotID %in% Nuc_Cyto_Transport_OG_glycoprotein_HEK293T) |> 
+  select(UniprotID, logFC) |> 
+  mutate(cell = 'HEK293T')
+
+# Jurkat
+Nuc_Cyto_Transport_OG_glycoprotein_Jurkat <- OG_glycoprotein_Jurkat_GO |> 
+  filter(Description == 'nucleocytoplasmic transport') |> 
+  select(geneID) |> 
+  separate_rows(geneID, sep = '/') |> 
+  pull()
+
+OG_glycoprotein_Jurkat_Nuc_Cyto_Transport <- OG_glycoprotein_Top_tb_Jurkat |> 
+  filter(UniprotID %in% Nuc_Cyto_Transport_OG_glycoprotein_Jurkat) |> 
+  select(UniprotID, logFC) |> 
+  mutate(cell = 'Jurkat')
+
+# ks test
 # RNA binding
+ks.test(OG_glycoprotein_HepG2_RNA_binding$logFC, OG_glycoprotein_HEK293T_RNA_binding$logFC)
+ks.test(OG_glycoprotein_HEK293T_RNA_binding$logFC, OG_glycoprotein_Jurkat_RNA_binding$logFC)
+ks.test(OG_glycoprotein_Jurkat_RNA_binding$logFC, OG_glycoprotein_HepG2_RNA_binding$logFC)
 
 # DNA binding
+ks.test(OG_glycoprotein_HepG2_DNA_binding$logFC, OG_glycoprotein_HEK293T_DNA_binding$logFC)
+ks.test(OG_glycoprotein_HEK293T_DNA_binding$logFC, OG_glycoprotein_Jurkat_DNA_binding$logFC)
+ks.test(OG_glycoprotein_Jurkat_DNA_binding$logFC, OG_glycoprotein_HepG2_DNA_binding$logFC)
 
-# P-body
+# nucleocytoplasmic transport
+ks.test(OG_glycoprotein_HepG2_Nuc_Cyto_Transport$logFC, OG_glycoprotein_HEK293T_Nuc_Cyto_Transport$logFC)
+ks.test(OG_glycoprotein_HEK293T_Nuc_Cyto_Transport$logFC, OG_glycoprotein_Jurkat_Nuc_Cyto_Transport$logFC)
+ks.test(OG_glycoprotein_Jurkat_Nuc_Cyto_Transport$logFC, OG_glycoprotein_HepG2_Nuc_Cyto_Transport$logFC)
+

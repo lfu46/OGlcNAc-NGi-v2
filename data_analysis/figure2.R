@@ -192,7 +192,7 @@ OG_glycoprotein_unique_Jurkat_GO <- read_csv(
 gene_ontology_OG_glycoprotein_common_unique <- bind_rows(
   OG_glycoprotein_common_GO |> filter(
     Description %in% c(
-      'RNA binding', 'cytoplasmic ribonucleoprotein granule', 'P-body', 'DNA binding'
+      'RNA binding', 'cytoplasmic ribonucleoprotein granule', 'P-body', 'nucleocytoplasmic transport', 'DNA binding'
     )
   ) |> 
     mutate(group = 'Common'),
@@ -221,7 +221,7 @@ gene_ontology_OG_glycoprotein_common_unique <- bind_rows(
   select(Description, pvalue, group) |> 
   mutate(
     Description = factor(Description, levels = c(
-      'RNA binding', 'cytoplasmic ribonucleoprotein granule', 'P-body', 'DNA binding',
+      'RNA binding', 'cytoplasmic ribonucleoprotein granule', 'P-body', 'nucleocytoplasmic transport', 'DNA binding',
       'positive regulation of canonical Wnt signaling pathway', 'double-stranded DNA binding', 'humoral immune response',
       'lipid metabolic process', 'sterol metabolic process', 'cholesterol homeostasis', 'cell-matrix adhesion',
       'immune response', 'positive regulation of T cell proliferation', 'cell surface', 'plasma membrane'
