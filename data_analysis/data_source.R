@@ -1,6 +1,17 @@
 # import packages
 library(tidyverse)
 
+# colors
+Color_1 = "#B5D086"
+Color_2 = "#7FB2D4"
+Color_3 = "#f8766d"
+Color_4 = "#00bfc4"
+Color_5 = "#FDE725"
+Color_6 = "#440154"
+Color_7 = "orange"
+Color_8 = "#35b779"
+Color_9 = "#31004a"
+
 # raw file
 # OG
 OG_psm_raw_HepG2 <- read_csv(
@@ -137,3 +148,53 @@ WP_protein_sl_tmm_HEK293T <- read_csv(
 WP_protein_sl_tmm_Jurkat <- read_csv(
   'data_source/WP_normalization/WP_protein_sl_tmm_Jurkat.csv'
 )
+
+### OG differential analysis
+## glycopeptide level
+# HepG2
+OG_glycopeptide_Top_tb_HepG2 <- read_csv(
+  'data_source/OG_differential_analysis/OG_glycopeptide_Top_tb_HepG2.csv'
+)
+
+# HEK293T
+OG_glycopeptide_Top_tb_HEK293T <- read_csv(
+  'data_source/OG_differential_analysis/OG_glycopeptide_Top_tb_HEK293T.csv'
+)
+
+# Jurkat
+OG_glycopeptide_Top_tb_Jurkat <- read_csv(
+  'data_source/OG_differential_analysis/OG_glycopeptide_Top_tb_Jurkat.csv'
+)
+
+## glycoprotein
+# HepG2
+OG_glycoprotein_Top_tb_HepG2 <- read_csv(
+  'data_source/OG_differential_analysis/OG_glycoprotein_Top_tb_HepG2.csv'
+)
+
+# HEK293T
+OG_glycoprotein_Top_tb_HEK293T <- read_csv(
+  'data_source/OG_differential_analysis/OG_glycoprotein_Top_tb_HEK293T.csv'
+)
+
+# Jurkat
+OG_glycoprotein_Top_tb_Jurkat <- read_csv(
+  'data_source/OG_differential_analysis/OG_glycoprotein_Top_tb_Jurkat.csv'
+)
+
+## WP differential analysis
+# HepG2
+WP_protein_Top_tb_HepG2 <- read_csv(
+  'data_source/WP_differential_analysis/WP_protein_Top_tb_HepG2.csv'
+)
+
+# HEK293T
+WP_protein_Top_tb_HEK293T <- read_csv(
+  'data_source/WP_differential_analysis/WP_protein_Top_tb_HEK293T.csv'
+)
+
+# Jurkat
+WP_protein_Top_tb_Jurkat <- read_csv(
+  'data_source/WP_differential_analysis/WP_protein_Top_tb_Jurkat.csv'
+)
+

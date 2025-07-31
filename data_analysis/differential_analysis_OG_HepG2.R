@@ -30,6 +30,13 @@ Rownames_OG_glycopeptide_Top_HepG2 <- rownames(OG_glycopeptide_Top_HepG2)
 OG_glycopeptide_Top_tb_HepG2 <- as_tibble(OG_glycopeptide_Top_HepG2)
 OG_glycopeptide_Top_tb_HepG2$Index <- Rownames_OG_glycopeptide_Top_HepG2
 
+OG_glycopeptide_Top_tb_HepG2 <- OG_glycopeptide_Top_tb_HepG2 |> 
+  left_join(OG_glycopeptide_noTn_sl_tmm_HepG2 |> select(Index:localized), by = join_by(Index == Index)) |> 
+  mutate(site_position = str_extract(combined_site, "\\d+")) %>%
+  mutate(
+    site_position = as.numeric(site_position)
+  )
+
 write_csv(
   OG_glycopeptide_Top_tb_HepG2,
   file = 'data_source/OG_differential_analysis/OG_glycopeptide_Top_tb_HepG2.csv'

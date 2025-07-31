@@ -30,6 +30,13 @@ Rownames_OG_glycopeptide_Top_Jurkat <- rownames(OG_glycopeptide_Top_Jurkat)
 OG_glycopeptide_Top_tb_Jurkat <- as_tibble(OG_glycopeptide_Top_Jurkat)
 OG_glycopeptide_Top_tb_Jurkat$Index <- Rownames_OG_glycopeptide_Top_Jurkat
 
+OG_glycopeptide_Top_tb_Jurkat <- OG_glycopeptide_Top_tb_Jurkat |> 
+  left_join(OG_glycopeptide_noTn_sl_tmm_Jurkat |> select(Index:localized), by = join_by(Index == Index)) |> 
+  mutate(site_position = str_extract(combined_site, "\\d+")) %>%
+  mutate(
+    site_position = as.numeric(site_position)
+  )
+
 write_csv(
   OG_glycopeptide_Top_tb_Jurkat,
   file = 'data_source/OG_differential_analysis/OG_glycopeptide_Top_tb_Jurkat.csv'
