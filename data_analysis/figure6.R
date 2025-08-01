@@ -138,5 +138,82 @@ ggsave(
   height = 2.8, width = 2.5, units = 'in'
 )
 
+### figure 6C, Ordered vs. Disordered, up- and down-regulated O-GlcNAcylation site
+# remove Tn antigen OG glycoprotein from sequence parameter database
+Tn_antigen_database <- read_csv(
+  'data_source/Tn_antigen_database/Tn_antigen_database.csv'
+)
 
+library(readxl)
+
+OG_site_OrderedvsDisordered_filtered <- read_xlsx(
+  'data_source/OGlcNAc_site/OG_site_disorder_tb.xlsx'
+) |> 
+  filter(
+    ! UniprotID %in% Tn_antigen_database$Uniprot.Entry
+  )
+
+# wilcoxon test
+library(rstatix)
+library(ggpubr)
+
+OG_site_OrderedvsDisordered_wilcoxon_test <- OG_site_OrderedvsDisordered_filtered |> 
+  mutate(
+    Disorder = case_when(
+      disorder > 0.5 ~ "Disordered",
+      disorder < 0.5 ~ "Ordered"
+    )
+  )|> 
+  group_by(cell) |> 
+  wilcox_test(logFC ~ Disorder, p.adjust.method = "BH") |> 
+  add_significance("p")
+
+# violin boxplot
+figure6C <- OG_site_OrderedvsDisordered_filtered |> 
+  filter(!is.na(disorder)) |> 
+  mutate(
+    Disorder = case_when(
+      disorder > 0.5 ~ "Disordered",
+      disorder < 0.5 ~ "Ordered"
+    )
+  )|> 
+  ggplot() +
+  geom_violin(
+    aes(x = factor(Disorder, levels = c("Ordered", "Disordered")), y = logFC, fill = cell), 
+    color = "transparent"
+  ) +
+  geom_boxplot(
+    aes(x = factor(Disorder, levels = c("Ordered", "Disordered")), y = logFC), 
+    color = "black", outliers = FALSE, width = 0.2
+  ) +
+  labs(x = "", y = expression(log[2]*"(Tuni/Ctrl)")) +
+  scale_fill_manual(
+    values = c(
+      "HEK293T" = Color_2,
+      "HepG2" = Color_3,
+      "Jurkat" = Color_4
+    )
+  ) +
+  facet_grid(~ cell, scales = "free_x") +
+  stat_pvalue_manual(data = OG_site_OrderedvsDisordered_wilcoxon_test, label = "p.signif", tip.length = 0, 
+                     size = 7,
+                     hide.ns = "p", y.position = c(1.8)) +
+  coord_cartesian(ylim = c(-2, 2)) +
+  theme_bw() +
+  theme(
+    panel.grid.major = element_line(linewidth = 0.2, color = "gray"),
+    panel.grid.minor = element_line(linewidth = 0.1, color = "gray"),
+    axis.title = element_text(size = 9),
+    axis.text.x = element_text(size = 9, color = "black", angle = 30, hjust = 1),
+    axis.text.y = element_text(size = 9, color = "black"),
+    legend.position = "none",
+    strip.text = element_text(size = 9, color = "black"),
+    strip.background = element_rect(fill = NA, color = NA)
+  )
+
+ggsave(
+  filename = 'figures/figure6/figure6C.eps',
+  plot = figure6C,
+  height = 2.8, width = 2.5, units = 'in'
+)
 
