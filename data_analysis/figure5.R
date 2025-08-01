@@ -199,7 +199,204 @@ ggsave(
   height = 2, width = 2, units = 'in'
 )
 
+### figure5C, mitochondrial central dogma, OG glycoprotein HepG2
+library(readxl)
 
+# import Human.MitoCarta3.xlsx
+# https://www.broadinstitute.org/mitocarta/mitocarta30-inventory-mammalian-mitochondrial-proteins-and-pathways
+HumanMitoCarta_3 <- read_xlsx(
+  "data_source/Mito_OG/Human.MitoCarta3.xlsx",
+  sheet = 'A Human MitoCarta3.0',
+  col_names = TRUE,
+  .name_repair = "universal"
+) 
 
+Mito_pathway <- HumanMitoCarta_3 |> 
+  select(Symbol, UniprotID = UniProt, MitoCarta3.0_MitoPathways) |> 
+  separate_rows(MitoCarta3.0_MitoPathways, sep = ' \\| ') |> 
+  distinct()
 
+# extract OG glycoprotein information from HEK293T, HepG2 and Jurkat
+# HEK293T
+OG_glycoprotein_mito_pathway_HEK293T <- Mito_pathway |> 
+  left_join(OG_glycoprotein_Top_tb_HEK293T, by = 'UniprotID') |> 
+  filter(!is.na(logFC)) |> 
+  mutate(cell = "HEK293T")
+
+# HepG2
+OG_glycoprotein_mito_pathway_HepG2 <- Mito_pathway |> 
+  left_join(OG_glycoprotein_Top_tb_HepG2, by = 'UniprotID') |> 
+  filter(!is.na(logFC)) |> 
+  mutate(cell = "HepG2")
+
+# Jurkat
+OG_glycoprotein_mito_pathway_Jurkat <- Mito_pathway |> 
+  left_join(OG_glycoprotein_Top_tb_Jurkat, by = 'UniprotID') |> 
+  filter(!is.na(logFC)) |> 
+  mutate(cell = "Jurkat")
+
+# combine result from HEK293T, HepG2 and Jurkat
+OG_glycoprotein_mito_pathway_combined <- bind_rows(
+  OG_glycoprotein_mito_pathway_HEK293T,
+  OG_glycoprotein_mito_pathway_HepG2,
+  OG_glycoprotein_mito_pathway_Jurkat
+)
+
+# wilcoxon test
+library(rstatix)
+library(ggpubr)
+
+OG_glycoprotein_central_dogma_wilcoxon_test <- OG_glycoprotein_mito_pathway_combined |> 
+  filter(str_detect(MitoCarta3.0_MitoPathways, "Mitochondrial central dogma")) |> 
+  wilcox_test(logFC ~ cell, p.adjust.method = "BH") |> 
+  add_significance("p")
+
+# violin boxplot
+figure5C <- OG_glycoprotein_mito_pathway_combined |> 
+  ggplot() +
+  geom_jitter(
+    aes(
+      x = cell, y = logFC, color = cell
+    ), 
+    position = position_jitter(width = 0.2)
+  ) +
+  geom_boxplot(
+    aes(
+      x = cell, y = logFC
+    ),
+    color = "black", fill = "transparent", outliers = FALSE
+  ) +
+  labs(x = "", y = expression(log[2]*"(Tuni/Ctrl)")) +
+  scale_color_manual(
+    values = c(
+      "HEK293T" = Color_2,
+      "HepG2" = Color_3,
+      "Jurkat" = Color_4
+    )
+  ) +
+  stat_pvalue_manual(data = OG_glycoprotein_central_dogma_wilcoxon_test, label = "p.signif", 
+                     tip.length = 0, size = 7,
+                     hide.ns = "p", y.position = c(1.7, 2.2, 1.8)) +
+  coord_cartesian(ylim = c(-1.8, 2.4)) +
+  ggtitle("Mito. Central Dogma") +
+  theme_bw() +
+  theme(
+    title = element_text(color = "black", size = 9, lineheight = 0.15),
+    panel.grid.major = element_line(linewidth = 0.2, color = "gray"),
+    panel.grid.minor = element_line(linewidth = 0.1, color = "gray"),
+    axis.title = element_text(size = 9),
+    axis.text.x = element_text(size = 9, color = "black", angle = 30, hjust = 1),
+    axis.text.y = element_text(size = 9, color = "black"),
+    legend.position = "none",
+    strip.text = element_text(size = 9, color = "black"),
+    strip.background = element_rect(fill = "transparent", color = "transparent")
+  )
+
+ggsave(
+  filename = 'figures/figure5/figure5C.eps',
+  plot = figure5C,
+  height = 2.5, width = 2, units = 'in'
+)
+
+### figure5D, mitochondrial disease, OG glycoprotein HepG2
+# import MitoCop.xlsx
+# https://www.sciencedirect.com/science/article/pii/S1550413121005295
+# Supplemental information, Table S1
+library(readxl)
+
+MitoCop_mito <- read_xlsx(
+  "data_source/Mito_OG/MitoCoP.xlsx",
+  sheet = '(B) MitoCoP (1,134 genes)',
+  skip = 1,
+  col_names = TRUE,
+  .name_repair = "universal"
+)
+
+MitoCop_mito_disease <- MitoCop_mito |> 
+  select(UniprotID = Simplified.protein.IDs, MitoCoP.disease.gene, 
+         Central.nervous.system:Tumors) |> 
+  filter(MitoCoP.disease.gene == 1) |> 
+  separate_rows(UniprotID, sep = ";") |> 
+  pivot_longer(Central.nervous.system:Tumors, 
+               names_to = 'Function', values_to = 'value') |> 
+  filter(!is.na(value)) |> 
+  distinct()
+
+# extract OG glycoprotein information from HEK293T, HepG2 and Jurkat
+# HEK293T
+OG_glycoprotein_mito_3_HEK293T <- MitoCop_mito_disease |> 
+  left_join(OG_glycoprotein_Top_tb_HEK293T, by = 'UniprotID') |> 
+  filter(!is.na(logFC)) |> 
+  mutate(cell = "HEK293T")
+
+# HepG2
+OG_glycoprotein_mito_3_HepG2 <- MitoCop_mito_disease |> 
+  left_join(OG_glycoprotein_Top_tb_HepG2, by = 'UniprotID') |> 
+  filter(!is.na(logFC)) |> 
+  mutate(cell = "HepG2")
+
+# Jurkat
+OG_glycoprotein_mito_3_Jurkat <- MitoCop_mito_disease |> 
+  left_join(OG_glycoprotein_Top_tb_Jurkat, by = 'UniprotID') |> 
+  filter(!is.na(logFC)) |> 
+  mutate(cell = "Jurkat")
+
+# combine result from HEK293T, HepG2 and Jurkat
+OG_glycoprotein_mitocop_mito_3_combined <- bind_rows(
+  OG_glycoprotein_mito_3_HEK293T,
+  OG_glycoprotein_mito_3_HepG2,
+  OG_glycoprotein_mito_3_Jurkat
+)
+
+# wilcoxon test
+library(rstatix)
+library(ggpubr)
+
+OG_glycoprotein_mitocop_disease_wilcoxon_test <- OG_glycoprotein_mitocop_mito_3_combined |> 
+  filter(Function == "Metabolism" | Function == "Liver") |> 
+  wilcox_test(logFC ~ cell, p.adjust.method = "BH") |> 
+  add_significance("p")
+
+# violin boxplot
+figure5D <- OG_glycoprotein_mitocop_mito_3_combined |> 
+  ggplot(
+    aes(x = cell, y = logFC)
+  ) +
+  geom_jitter(
+    aes(color = cell), position = position_jitter(width = 0.2)
+  ) +
+  geom_boxplot(
+    color = "black", fill = "transparent", outliers = FALSE
+  ) +
+  labs(x = "", y = expression(log[2]*"(Tuni/Ctrl)")) +
+  scale_color_manual(
+    values = c(
+      "HEK293T" = Color_2,
+      "HepG2" = Color_3,
+      "Jurkat" = Color_4
+    )
+  ) +
+  stat_pvalue_manual(data = OG_glycoprotein_mitocop_disease_wilcoxon_test, label = "p.signif", 
+                     tip.length = 0, size = 7,
+                     hide.ns = "p", y.position = c(1.4, 1.7, 2.0)) +
+  coord_cartesian(ylim = c(-1.8, 2.2)) +
+  ggtitle("Liver & Metabolism") +
+  theme_bw() +
+  theme(
+    title = element_text(color = "black", size = 9, lineheight = 0.15),
+    panel.grid.major = element_line(linewidth = 0.2, color = "gray"),
+    panel.grid.minor = element_line(linewidth = 0.1, color = "gray"),
+    axis.title = element_text(size = 9),
+    axis.text.x = element_text(size = 9, color = "black", angle = 30, hjust = 1),
+    axis.text.y = element_text(size = 9, color = "black"),
+    legend.position = "none",
+    strip.text = element_text(size = 9, color = "black"),
+    strip.background = element_rect(fill = "transparent", color = "transparent")
+  )
+
+ggsave(
+  filename = 'figures/figure5/figure5D.eps',
+  plot = figure5D,
+  height = 2.5, width = 2, units = 'in'
+)
 
