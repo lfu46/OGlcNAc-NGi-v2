@@ -400,3 +400,207 @@ ha1 = rowAnnotation("log2(Tuni/Ctrl)" = anno_points(anno_matrix,
 
 Heatmap(mat, name = "log2(Tuni/Ctrl)", show_row_names = TRUE, show_column_names = TRUE,
               right_annotation = ha1)
+
+### figure 4C, OG up HEK293T, gene ontology
+library(org.Hs.eg.db)
+library(clusterProfiler)
+
+# total OG glycoprotein
+OG_glycoprotein_total <- bind_rows(
+  OG_glycoprotein_Top_tb_HepG2 |> select(UniprotID),
+  OG_glycoprotein_Top_tb_HEK293T |> select(UniprotID),
+  OG_glycoprotein_Top_tb_Jurkat |> select(UniprotID)
+) |> 
+  distinct() |> 
+  pull()
+
+# upregulated OG glycoprotein, HEK293T
+OG_glycoprotein_up_HEK293T_list <- OG_glycoprotein_Top_tb_HEK293T |> 
+  filter(logFC > 0.5, adj.P.Val < 0.05) |> 
+  select(UniprotID) |> 
+  pull()
+
+# gene ontology analysis
+OG_glycoprotein_up_HEK293T_GO <- enrichGO(
+  gene = OG_glycoprotein_up_HEK293T_list,
+  OrgDb = org.Hs.eg.db,
+  universe = OG_glycoprotein_total,
+  keyType = 'UNIPROT',
+  ont = 'ALL',
+  pvalueCutoff = 1,
+  qvalueCutoff = 1
+)
+
+write_csv(
+  OG_glycoprotein_up_HEK293T_GO@result,
+  file = 'data_source/gene_ontology/OG_glycoprotein_up_HEK293T_GO.csv'
+)
+
+# import gene ontology, OG up HEK293T
+OG_glycoprotein_up_HEK293T_GO <- read_csv(
+  'data_source/gene_ontology/OG_glycoprotein_up_HEK293T_GO.csv'
+)
+
+# barplot
+figure4C <- OG_glycoprotein_up_HEK293T_GO |> 
+  filter(
+    Description %in% c(
+      'preribosome', 'rRNA processing', 'nucleotide binding', 'RNA binding', 'nucleolus'
+    )
+  ) |> 
+  ggplot() +
+  geom_bar(
+    aes(x = -log10(pvalue), y = fct_reorder(Description, -log10(pvalue))), 
+    stat = "identity", fill = Color_2, width = 0.7
+  ) +
+  labs(x = expression(-log[10]*"("*paste(italic(P), " Value")*")"), y = "") +
+  geom_text(aes(label = Description, x = 0, y = Description), hjust = 0, size = 3) +
+  theme_classic() +
+  theme(
+    axis.title.x = element_text(size = 9),
+    axis.text.x = element_text(color = "black", size = 9),
+    axis.text.y = element_blank(),
+    axis.ticks.length.y = unit(0, "in")
+  )
+
+ggsave(
+  filename = 'figures/figure4/figure4C.eps', 
+  plot = figure4C, 
+  height = 1.5, width = 2, units = 'in'
+)
+
+### figure 4D, OG up HepG2, gene ontology
+library(org.Hs.eg.db)
+library(clusterProfiler)
+
+# total OG glycoprotein
+OG_glycoprotein_total <- bind_rows(
+  OG_glycoprotein_Top_tb_HepG2 |> select(UniprotID),
+  OG_glycoprotein_Top_tb_HEK293T |> select(UniprotID),
+  OG_glycoprotein_Top_tb_Jurkat |> select(UniprotID)
+) |> 
+  distinct() |> 
+  pull()
+
+# upregulated OG glycoprotein, HepG2
+OG_glycoprotein_up_HepG2_list <- OG_glycoprotein_Top_tb_HepG2 |> 
+  filter(logFC > 0.5, adj.P.Val < 0.05) |> 
+  select(UniprotID) |> 
+  pull()
+
+# gene ontology analysis
+OG_glycoprotein_up_HepG2_GO <- enrichGO(
+  gene = OG_glycoprotein_up_HepG2_list,
+  OrgDb = org.Hs.eg.db,
+  universe = OG_glycoprotein_total,
+  keyType = 'UNIPROT',
+  ont = 'ALL',
+  pvalueCutoff = 1,
+  qvalueCutoff = 1
+)
+
+write_csv(
+  OG_glycoprotein_up_HepG2_GO@result,
+  file = 'data_source/gene_ontology/OG_glycoprotein_up_HepG2_GO.csv'
+)
+
+# import gene ontology, OG up HepG2
+OG_glycoprotein_up_HepG2_GO <- read_csv(
+  'data_source/gene_ontology/OG_glycoprotein_up_HepG2_GO.csv'
+)
+
+# barplot
+figure4D <- OG_glycoprotein_up_HepG2_GO |> 
+  filter(
+    Description %in% c(
+      'extracellular exosome', 'extracellular vesicle', 'mitochondrial matrix', 'RNA binding', 'GTP binding'
+    )
+  ) |> 
+  ggplot() +
+  geom_bar(
+    aes(x = -log10(pvalue), y = fct_reorder(Description, -log10(pvalue))), 
+    stat = "identity", fill = Color_3, width = 0.7
+  ) +
+  labs(x = expression(-log[10]*"("*paste(italic(P), " Value")*")"), y = "") +
+  geom_text(aes(label = Description, x = 0, y = Description), hjust = 0, size = 3) +
+  theme_classic() +
+  theme(
+    axis.title.x = element_text(size = 9),
+    axis.text.x = element_text(color = "black", size = 9),
+    axis.text.y = element_blank(),
+    axis.ticks.length.y = unit(0, "in")
+  )
+
+ggsave(
+  filename = 'figures/figure4/figure4D.eps', 
+  plot = figure4D, 
+  height = 1.5, width = 2, units = 'in'
+)
+
+### figure 4E, OG down Jurkat, gene ontology
+library(org.Hs.eg.db)
+library(clusterProfiler)
+
+# total OG glycoprotein
+OG_glycoprotein_total <- bind_rows(
+  OG_glycoprotein_Top_tb_HepG2 |> select(UniprotID),
+  OG_glycoprotein_Top_tb_HEK293T |> select(UniprotID),
+  OG_glycoprotein_Top_tb_Jurkat |> select(UniprotID)
+) |> 
+  distinct() |> 
+  pull()
+
+# downregulated OG glycoprotein, Jurkat
+OG_glycoprotein_down_Jurkat_list <- OG_glycoprotein_Top_tb_Jurkat |> 
+  filter(logFC < -0.5, adj.P.Val < 0.05) |> 
+  select(UniprotID) |> 
+  pull()
+
+# gene ontology analysis
+OG_glycoprotein_down_Jurkat_GO <- enrichGO(
+  gene = OG_glycoprotein_down_Jurkat_list,
+  OrgDb = org.Hs.eg.db,
+  universe = OG_glycoprotein_total,
+  keyType = 'UNIPROT',
+  ont = 'ALL',
+  pvalueCutoff = 1,
+  qvalueCutoff = 1
+)
+
+write_csv(
+  OG_glycoprotein_down_Jurkat_GO@result,
+  file = 'data_source/gene_ontology/OG_glycoprotein_down_Jurkat_GO.csv'
+)
+
+# import gene ontology, OG down Jurkat
+OG_glycoprotein_down_Jurkat_GO <- read_csv(
+  'data_source/gene_ontology/OG_glycoprotein_down_Jurkat_GO.csv'
+)
+
+# barplot
+figure4E <- OG_glycoprotein_down_Jurkat_GO |> 
+  filter(
+    Description %in% c(
+      'glycoprotein biosynthetic process', 'carbohydrate derivative metabolic process', 'Golgi membrane', 'protein glycosylation', 'condensed nuclear chromosome'
+    )
+  ) |> 
+  ggplot() +
+  geom_bar(
+    aes(x = -log10(pvalue), y = fct_reorder(Description, -log10(pvalue))), 
+    stat = "identity", fill = Color_4, width = 0.7
+  ) +
+  labs(x = expression(-log[10]*"("*paste(italic(P), " Value")*")"), y = "") +
+  # geom_text(aes(label = Description, x = 0, y = Description), hjust = 0, size = 3) +
+  theme_classic() +
+  theme(
+    axis.title.x = element_text(size = 9),
+    axis.text.x = element_text(color = "black", size = 9),
+    axis.text.y = element_blank(),
+    axis.ticks.length.y = unit(0, "in")
+  )
+
+ggsave(
+  filename = 'figures/figure4/figure4E.eps', 
+  plot = figure4E, 
+  height = 1.5, width = 2, units = 'in'
+)

@@ -685,7 +685,3 @@ ggsave(
   height = 2.5, width = 4.7, units = 'in',
   fallback_resolution = 1200
 )
-
-
-
-
